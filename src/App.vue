@@ -1,26 +1,21 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <exchange></exchange>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Exchange from './components/Exchange.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Exchange
   }
 }
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  background: #43c6ac;
+  background: linear-gradient(to right, #f8ffae, #43c6ac);
 }
 </style>
