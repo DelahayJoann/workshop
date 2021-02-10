@@ -2,7 +2,7 @@
     <div class="container">
         <h1 class="my-4">App Exchange</h1>
         <select-devises v-bind:devises="devises_rates" v-on:choixUno="choixUn($event)" v-on:choixDos="choixDeux($event)"></select-devises>
-        <amount-input v-on:amountSend="receiveAmount($event)" v-model="amount"></amount-input>
+        <amount-input v-on:amountSend="receiveAmount($event)"></amount-input>
         <p class="converted">{{ out }}</p>
     </div>
 </template>
