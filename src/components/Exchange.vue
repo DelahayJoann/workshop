@@ -1,61 +1,72 @@
 <template>
     <div class="container">
-        <h1 class="my-4">App Meteo avec Vue.js</h1>
-        <div class="form-group mb-5">
-            <label for="position">Entrez le nom d'une ville</label>
-            <select name="test" id="test">
-                <option value="`{{index}}`" :key="index" v-for="(devise,index) in devises_rate"> {{index}}</option>
-            </select>
-        </div>
-
-        <div class="w-75 m-auto">
-            <h3 class="text-center mb-3">Position:
-
-            </h3>
-            <div class="card text-center p-5">
-                <p class="texte-affichage">
-
-                </p>
-                <p class="texte-affichage">
-
-                </p>
-            </div>
-        </div>
+        <h1 class="my-4">App Exchange</h1>
+        <select-devises v-bind:devises="devises_rates" v-on:choixUno="choixUn($event)" v-on:choixDos="choixDeux($event)"></select-devises>
+        <amount-input v-on:amountSend="receiveAmount($event)" v-model="amount"></amount-input>
+        <p class="converted">{{ out }}</p>
     </div>
 </template>
 
 
 <script>
-    import axios from 'axios'
+    import axios from 'axios';
+    import SelectDevises from './Select-devises.vue';
+    import AmountInput from './Amount-input.vue';
     export default {
         name: 'Exchange',
         data(){
             return {
-                requete: '',
-                devises_rate: [],
+                devise1: '',
+                devise2: '',
+                amount: 0,
+                devises_rates: [],
+                convert_rate: undefined,
+                converted: 0,
                 url_latest: 'https://api.exchangeratesapi.io/latest',
-                url_convert: 'https://api.exchangeratesapi.io/latest?symbols=' //USD,GBP
+                url_convert_rate: 'https://api.exchangeratesapi.io/latest?base='
             }
         },
         methods: {
-            
+            choixUn: function(devi){
+                this.devise1 = devi;
+                this.receiveAmount(this.amount);
+            },
+            choixDeux: function(devi){
+                this.devise2 = devi;
+                this.receiveAmount(this.amount);
+            },
+            receiveAmount: function(amount){
+                this.amount = amount;
+                this.getRate(this.url_convert_rate+this.devise1+'&symbols='+this.devise2, amount)
+            },
+            getRate: function(url,amount){
+                axios
+                .get(url)
+                .then(reponse =>{
+                   this.convert_rate = reponse.data.rates;
+                   this.converted = amount * this.convert_rate[this.devise2];
+                })
+            },
         },
+        components: { SelectDevises, AmountInput },
         created(){
             axios
             .get(`${this.url_latest}`)
             .then(reponse => {
-                console.log(reponse);
-                this.devises_rate = reponse.data.rates;
+                this.devises_rates = reponse.data.rates;
             })
-        }
+        },
+        computed: {
+                out: function(){
+                    return  this.amount+' '+this.devise1+' = '+this.converted.toFixed(2)+' '+this.devise2;
+                }
+            }
     }
 </script>
 
 
 <style>
-.texte-affichage {
-    font-size: 30px;
-    font-weight: 300;
-    line-height: 1.2;
+.converted{
+    font-size: 20px;
 }
 </style>
