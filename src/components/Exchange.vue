@@ -29,11 +29,11 @@
         methods: {
             choixUn: function(devi){
                 this.devise1 = devi;
-                this.receiveAmount(this.amount);
+                if(this.devise1 && this.devise2)this.receiveAmount(this.amount);
             },
             choixDeux: function(devi){
                 this.devise2 = devi;
-                this.receiveAmount(this.amount);
+                if(this.devise1 && this.devise2)this.receiveAmount(this.amount);
             },
             receiveAmount: function(amount){
                 this.amount = amount;
@@ -58,7 +58,10 @@
         },
         computed: {
                 out: function(){
-                    return  this.amount+' '+this.devise1+' = '+this.converted.toFixed(2)+' '+this.devise2;
+                    let output = '';
+                    output += (this.devise1)?this.amount+' '+this.devise1+' = ':'? = ';
+                    output += (this.devise2)?this.converted.toFixed(2)+' '+this.devise2:' ?';
+                    return  output;
                 }
             }
     }
